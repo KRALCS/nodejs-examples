@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "npmexp",
+  "version": "1.0.0",
+  "description": "Node Blog Application",
+  "main": "app.js",
+  "scripts": {
+    "boot": "nodemon app.js"
+  },
+  "author": "Cemal SÖNMEZ",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
