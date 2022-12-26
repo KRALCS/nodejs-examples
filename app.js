@@ -4,8 +4,8 @@ const {engine} = require('express-handlebars')
 const path = require("path")
 const app = express()
 
-mongoose.connect('mongodb://127.0.0.1:27017/nodejs')
-  .then(() => console.log('Connected!'));
+mongoose.set("strictQuery", false);
+mongoose.connect('mongodb://127.0.0.1:27017/nodejs').then(() => console.log('Connected!'));
 
 app.engine('handlebars', engine())
 app.set('view engine', 'handlebars')
