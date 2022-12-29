@@ -1,4 +1,5 @@
 const express = require("express");
+const Post = require('../models/Post')
 const router = express.Router();
 
 router.get('/', function (req, res) {
@@ -7,8 +8,10 @@ router.get('/', function (req, res) {
 router.get('/about', function (req, res) {
   res.render("site/about")
 })
-router.get('/blog', function (req, res) {
-  res.render("site/blog")
+router.get('/blog', async function (req, res) {
+  Post.find({}).lean().then(posts => {
+    res.render("site/blog", {posts:posts})
+  })
 })
 router.get('/contact', function (req, res) {
   res.render("site/contact")
