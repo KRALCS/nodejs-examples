@@ -1,11 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const fileUpload = require('express-fileupload')
 const {engine} = require('express-handlebars')
 const app = express()
 
 mongoose.set("strictQuery", false);
 mongoose.connect('mongodb://127.0.0.1:27017/nodejs').then(() => console.log('Connected!'));
 
+app.use(fileUpload())
 app.use(express.static("public"))
 
 app.engine('handlebars', engine())
