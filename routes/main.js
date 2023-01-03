@@ -16,11 +16,7 @@ router.get('/blog', async function (req, res) {
 router.get('/contact', function (req, res) {
   res.render("site/contact")
 })
-router.get('/login', function (req, res) {
-  res.render("site/login")
-})
-router.get('/register', function (req, res) {
-  res.render("site/register")
-})
+
+
 
 module.exports = router;

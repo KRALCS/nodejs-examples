@@ -25,7 +25,9 @@ app.use("/", myMiddleware)
 
 const main = require("./routes/main")
 const posts = require("./routes/posts")
+const users = require("./routes/users")
 app.use("/", main)
 app.use("/posts", posts)
+app.use("/users", users)
 
 app.listen(3000)
