@@ -3,6 +3,7 @@ const Post = require('../models/Post')
 const router = express.Router();
 
 router.get('/', function (req, res) {
+  console.log(req.session)
   res.render("site/index")
 })
 router.get('/about', function (req, res) {

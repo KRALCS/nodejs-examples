@@ -11,7 +11,10 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.get('/new', function (req, res) {
-  res.render("site/addpost")
+    if(req.session.user) {
+        return res.render("site/addpost")
+    }
+    res.redirect("/users/login")
 })
 
 router.post('/new', urlencodedParser, function (req, res) {

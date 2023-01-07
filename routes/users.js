@@ -34,7 +34,21 @@ router.post('/login', urlencodedParser, function (req, res) {
     }, (err, user) => {
         if(user.length === 1) {
             // Oturum açma başarılı
-            res.redirect("/")
+            req.session.regenerate(function (err) {
+                if (err) {
+                    next(err)
+                }
+                user.forEach((item) => {
+                    req.session.user = item
+                })
+                //req.session.user = user[0]
+                req.session.save(function (err) {
+                    if (err) { 
+                        return next(err)
+                    }
+                    res.redirect('/')
+                })
+            })
         } else {
             res.redirect("/users/login")
         }
