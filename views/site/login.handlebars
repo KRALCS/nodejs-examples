@@ -22,6 +22,11 @@
 
 		<div class="row">
 			<div class="col-lg-12">
+				{{#if messages.message}}
+					<div class="{{messages.type}}">
+						{{messages.message}}
+					</div>
+				{{/if}}
 				<form action="/users/login" method="POST">
 					<div class="row text-center">
 						<div class="col-md-6 offset-3">

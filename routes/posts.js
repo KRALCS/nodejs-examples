@@ -29,9 +29,18 @@ router.post('/new', urlencodedParser, function (req, res) {
         ...req.body,
         post_image: `/img/postimages/${postImage.name}`
     }, (error, post) => {
+        req.session.flash = {
+            type: "alert alert-success",
+            message: "Post ekleme işlemi başarılı",
+        }
+        req.session.save(function (err) {
+            if (err) { 
+                console.log(err)
+            }
+        })
         console.log(error, post)
     })
-    res.send('File uploaded to ' + uploadPath);
+    res.redirect('/blog');
 })
 
 router.get('/:id', async function (req, res) {

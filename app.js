@@ -24,6 +24,13 @@ app.use(expressSession({
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/nodejs' }) // npm restart olunca sessionlar sıfırlanıyor. bunu çözmek için sessionları mongodbde tutmak gerekiyor
 }))
 
+// Flash Message Middleware
+app.use((req, res, next) => {
+    res.locals.messages = req.session.flash;
+    delete req.session.flash;
+    next();
+})
+
 app.use(fileUpload())
 app.use(express.static("public"))
 
