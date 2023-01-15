@@ -65,4 +65,12 @@ router.post('/login', urlencodedParser, function (req, res) {
     
 })
 
+router.get('/logout', function (req, res) {
+    req.session.user = null
+    req.session.save(function (err) {
+        if (err) next(err)
+        res.redirect('/')
+    })
+})
+
 module.exports = router;

@@ -34,6 +34,17 @@ app.use((req, res, next) => {
 app.use(fileUpload())
 app.use(express.static("public"))
 
+// Display links Middleware
+app.use((req, res, next) => {
+    const user = req.session.user;
+    console.log(req.session.user)
+    if(user) {
+        res.locals.displayLinks = true
+    } else {
+        res.locals.displayLinks = false
+    }
+    next()
+});
 
 app.engine('handlebars', engine({helpers:{generateDate:generateDate}}))
 app.set('view engine', 'handlebars')
