@@ -1,0 +1,63 @@
+<!--==========================
+    INSIDE HERO SECTION Section
+============================-->
+<section class="page-image page-image-about md-padding">
+	<h1 class="text-white text-center">CATEGORIES</h1>
+</section>
+
+<!--==========================
+    ABOUTUS Section
+============================-->
+<section id="aboutus" class="md-padding">
+	<div class="container">
+		{{> admin-navbar}}
+
+		<div class="clearfix"></div>
+		<div class="row mt-5">
+			<div class="col-md-4">
+
+				<form action="" method="POST" id="sentAddCategory" name="sentAddCategory" novalidate="novalidate"
+					enctype="multipart/form-data">
+					<div class="row text-center">
+						<div class="col-md-10 offset-1">
+							<div class="form-group">
+								<input class="form-control" name="name" type="text" placeholder="Category Name *"
+									required="required" data-validation-required-message="Please enter Category Name.">
+								<p class="help-block text-danger"></p>
+							</div>
+						</div>
+						<div class="col-md-10 offset-1">
+							<div id="success"></div>
+							<button id="btnAddCategory" class="main-btn" type="submit">Add</button>
+						</div>
+					</div>
+				</form>
+			</div>
+			<div class="col-md-8">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>#</th>
+						</tr>
+					</thead>
+					<tbody>
+						{{#each categories}}
+						<tr>
+							<td>{{this._id}}</td>
+							<td>{{this.name}}</td>
+							<td>{{generateDate this.date 'MMM DD YYYY'}}</td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		</div>
+
+	</div>
+</section>
+
+<!--==========================
+    THE TEAM
+============================-->

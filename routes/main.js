@@ -6,9 +6,7 @@ router.get('/', function (req, res) {
   console.log(req.session)
   res.render("site/index")
 })
-router.get('/about', function (req, res) {
-  res.render("site/about")
-})
+
 router.get('/blog', async function (req, res) {
 
   Post.find({}).lean().then(posts => {

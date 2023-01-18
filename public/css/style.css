@@ -930,8 +930,6 @@ span.writer {
     color: #FD8A10;
 }
 
-
-
-
-
-
+.float-left {
+    float: left;
+}
