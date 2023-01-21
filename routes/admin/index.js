@@ -10,7 +10,7 @@ router.get('/', function (req, res) {
 })
 
 router.get('/categories', function (req, res) {
-    Category.find({}).lean().then(categories => {
+    Category.find({}).sort({$natural: -1}).lean().then(categories => {
         res.render("admin/categories", {categories:categories})
     })
 })
@@ -21,6 +21,12 @@ router.post('/categories', urlencodedParser, function (req, res) {
             res.redirect('/admin/categories');
         }
     })
+})
+
+router.delete('/categories/:id', function (req, res) {
+    Category.remove({_id: req.params.id}).then(() => {
+        res.redirect("/admin/categories")
+    });
 })
 
 module.exports = router;

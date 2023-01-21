@@ -5,6 +5,9 @@ const MongoStore = require('connect-mongo');
 const generateDate = require('./helpers/generateDate').generateDate
 const {engine} = require('express-handlebars')
 const expressSession = require('express-session')
+
+const methodOverride = require('method-override')
+
 const app = express()
 
 mongoose.set("strictQuery", false);
@@ -33,6 +36,7 @@ app.use((req, res, next) => {
 
 app.use(fileUpload())
 app.use(express.static("public"))
+app.use(methodOverride("_method"))
 
 // Display links Middleware
 app.use((req, res, next) => {

@@ -39,6 +39,7 @@
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
+							<th>Tarih</th>
 							<th>#</th>
 						</tr>
 					</thead>
@@ -48,6 +49,12 @@
 							<td>{{this._id}}</td>
 							<td>{{this.name}}</td>
 							<td>{{generateDate this.date 'MMM DD YYYY'}}</td>
+							<td>
+								<form action="/admin/categories/{{this._id}}?_method=DELETE" method="POST">
+									<input type="hidden" name="_method" value="DELETE"/>
+									<button type="submit" class="btn btn-danger">Delete</button>
+								</form>
+							</td>
 						</tr>
 						{{/each}}
 					</tbody>
