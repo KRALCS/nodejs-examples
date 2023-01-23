@@ -4,6 +4,7 @@ const PostSchema = new mongoose.Schema({
     title: {type: String, required: true},
     content: {type: String, required: true},
     date: {type: Date, default: Date.now},
+    category: {type: mongoose.SchemaTypes.ObjectId, ref:'categories', required: true},
     post_image: {type: String, required: true},
 })
 

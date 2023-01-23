@@ -1,5 +1,6 @@
 const express = require("express");
 const Post = require('../models/Post')
+const Category = require('../models/Category')
 const router = express.Router();
 
 router.get('/', function (req, res) {
@@ -10,7 +11,9 @@ router.get('/', function (req, res) {
 router.get('/blog', async function (req, res) {
 
   Post.find({}).sort({$natural: -1}).lean().then(posts => {
-    res.render("site/blog", {posts:posts, messages: res.locals.messages})
+    Category.find({}).lean().then(categories  => {
+      res.render("site/blog", {posts:posts, categories:categories, messages: res.locals.messages})
+    })
   })
 })
 router.get('/contact', function (req, res) {

@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require('body-parser')
 const Post = require('../models/Post')
+const Category = require('../models/Category')
 const path = require('path')
 const router = express.Router();
 
@@ -12,9 +13,12 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.get('/new', function (req, res) {
     if(req.session.user) {
-        return res.render("site/addpost")
+        Category.find({}).lean().then(categories  => {
+            res.render("site/addpost", {categories: categories})
+        });
+    } else {
+        res.redirect("/users/login")
     }
-    res.redirect("/users/login")
 })
 
 router.post('/new', urlencodedParser, function (req, res) {
