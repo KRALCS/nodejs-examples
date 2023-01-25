@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require('body-parser')
 const Post = require('../models/Post')
 const Category = require('../models/Category')
+const User = require('../models/User')
 const path = require('path')
 const router = express.Router();
 
@@ -31,7 +32,8 @@ router.post('/new', urlencodedParser, function (req, res) {
     });
     Post.create({
         ...req.body,
-        post_image: `/img/postimages/${postImage.name}`
+        post_image: `/img/postimages/${postImage.name}`,
+        author: req.session.user._id
     }, (error, post) => {
         req.session.flash = {
             type: "alert alert-success",
@@ -47,10 +49,13 @@ router.post('/new', urlencodedParser, function (req, res) {
     res.redirect('/blog');
 })
 
-router.get('/:id', async function (req, res) {
-    let post = Post.findById(req.params.id).lean();
-    post = await post;
-    res.render("site/post", {post:post})
+router.get('/:id', function (req, res) {
+    Post.findById(req.params.id).populate({path: 'author', model: User}).lean().then(post => {
+        Category.find({}).lean().then(categories  => {
+            res.render("site/post", {post:post, categories:categories, messages: res.locals.messages})
+        })
+    });
+
 })
 
 /* POST /api/users gets JSON bodies
