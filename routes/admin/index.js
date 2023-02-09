@@ -43,4 +43,34 @@ router.delete('/posts/:id', function (req, res) {
     });
 })
 
+router.get('/posts/edit/:id', function (req, res) {
+    Post.findById(req.params.id).populate({path: 'author', model: User}).lean().then(post => {
+        Category.find({}).lean().then(categories  => {
+            res.render("admin/postedit", {post:post, categories:categories, messages: res.locals.messages})
+        })
+    });
+})
+
+router.put('/posts/edit/:id', function (req, res) {
+    let postImage = req.files.post_image
+    let uploadPath = __dirname + '/../../public/img/postimages/' + postImage.name;
+    postImage.mv(uploadPath, function(err) {
+        if (err) {
+            return res.status(500).send(err);
+        }
+    });
+    Post.findByIdAndUpdate(req.params.id, {
+        title: req.body.title,
+        content: req.body.content,
+        date: req.body.date,
+        category: req.body.category,
+        post_image: `/img/postimages/${postImage.name}`,
+    }, (error, post) => {
+        if (!error) {
+            res.redirect("/admin/posts");
+        }
+        console.log(error, post) 
+    });
+});
+
 module.exports = router;

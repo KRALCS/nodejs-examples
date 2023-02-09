@@ -27,6 +27,7 @@
 							<th>Category</th>
 							<th>Tarih</th>
 							<th>#</th>
+							<th>#</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -37,10 +38,11 @@
 							<td>{{this.author.name}}</td>
 							<td>{{this.category.name}}</td>
 							<td>{{generateDate this.date 'MMM DD YYYY'}}</td>
+							<td><a href="/admin/posts/edit/{{this._id}}" class="btn btn-sm btn-warning text-dark">Edit</a></td>
 							<td>
 								<form action="/admin/posts/{{this._id}}?_method=DELETE" method="POST">
 									<input type="hidden" name="_method" value="DELETE"/>
-									<button type="submit" class="btn btn-danger">Delete</button>
+									<button type="submit" class="btn btn-sm btn-danger">Delete</button>
 								</form>
 							</td>
 						</tr>
