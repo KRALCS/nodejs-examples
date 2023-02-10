@@ -13,9 +13,9 @@ var jsonParser = bodyParser.json()
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 router.get('/new', function (req, res) {
-    if(req.session.user) {
-        Category.find({}).lean().then(categories  => {
-            res.render("site/addpost", {categories: categories})
+    if (req.session.user) {
+        Category.find({}).lean().then(categories => {
+            res.render("site/addpost", { categories: categories })
         });
     } else {
         res.redirect("/users/login")
@@ -25,7 +25,7 @@ router.get('/new', function (req, res) {
 router.post('/new', urlencodedParser, function (req, res) {
     let postImage = req.files.post_image
     uploadPath = __dirname + '/../public/img/postimages/' + postImage.name;
-    postImage.mv(uploadPath, function(err) {
+    postImage.mv(uploadPath, function (err) {
         if (err) {
             return res.status(500).send(err);
         }
@@ -40,7 +40,7 @@ router.post('/new', urlencodedParser, function (req, res) {
             message: "Post ekleme işlemi başarılı",
         }
         req.session.save(function (err) {
-            if (err) { 
+            if (err) {
                 console.log(err)
             }
         })
@@ -50,9 +50,11 @@ router.post('/new', urlencodedParser, function (req, res) {
 })
 
 router.get('/:id', function (req, res) {
-    Post.findById(req.params.id).populate({path: 'author', model: User}).lean().then(post => {
-        Category.find({}).lean().then(categories  => {
-            res.render("site/post", {post:post, categories:categories, messages: res.locals.messages})
+    Post.findById(req.params.id).populate({ path: 'author', model: User }).lean().then(post => {
+        Category.find({}).lean().then(categories => {
+            Post.find({}).sort({ $natural: -1 }).lean().then(posts => {
+                res.render("site/post", { post: post, categories: categories, posts: posts, messages: res.locals.messages })
+            })
         })
     });
 

@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const fileUpload = require('express-fileupload')
 const MongoStore = require('connect-mongo');
 const generateDate = require('./helpers/generateDate').generateDate
+const limit = require('./helpers/limit').limit
 const setSelectedItem = require('./helpers/selected').setSelectedItem
 const {engine} = require('express-handlebars')
 const expressSession = require('express-session')
@@ -51,7 +52,14 @@ app.use((req, res, next) => {
     next()
 });
 
-app.engine('handlebars', engine({helpers:{generateDate:generateDate, setSelectedItem: setSelectedItem}}))
+// Handlebars helpers
+app.engine('handlebars', engine({
+    helpers:{
+        generateDate:generateDate, 
+        setSelectedItem: setSelectedItem,
+        limit: limit,
+    }
+}))
 app.set('view engine', 'handlebars')
 app.set('views', './views');
 
