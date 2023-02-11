@@ -49,25 +49,49 @@ router.post('/new', urlencodedParser, function (req, res) {
     res.redirect('/blog');
 })
 
+router.get('/category/:categoryId', (req, res) => {
+    Post.find({ category: req.params.categoryId }).populate({ path: 'category', model: Category }).lean().then(posts => {
+        Category.aggregate([
+            {
+                $lookup: {
+                    from: 'posts',
+                    localField: '_id',
+                    foreignField: 'category',
+                    as: 'posts'
+                }
+            },
+            {
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    num_of_posts: { $size: "$posts" }
+                }
+            }
+        ]).then(categories => {
+            res.render("site/blog", {posts:posts, categories:categories, messages: res.locals.messages})
+        })
+    });
+});
+
 router.get('/:id', function (req, res) {
     Post.findById(req.params.id).populate({ path: 'author', model: User }).lean().then(post => {
         Category.aggregate([
             {
-              $lookup: {
-                from: 'posts',
-                localField: '_id',
-                foreignField: 'category',
-                as: 'posts'
-              }
+                $lookup: {
+                    from: 'posts',
+                    localField: '_id',
+                    foreignField: 'category',
+                    as: 'posts'
+                }
             },
             {
-              $project: {
-                _id: 1,
-                name: 1,
-                num_of_posts: {$size: "$posts"}
-              }
+                $project: {
+                    _id: 1,
+                    name: 1,
+                    num_of_posts: { $size: "$posts" }
+                }
             }
-          ]).then(categories => {
+        ]).then(categories => {
             Post.find({}).sort({ $natural: -1 }).lean().then(posts => {
                 res.render("site/post", { post: post, categories: categories, posts: posts, messages: res.locals.messages })
             })
