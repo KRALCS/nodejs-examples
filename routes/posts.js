@@ -51,7 +51,23 @@ router.post('/new', urlencodedParser, function (req, res) {
 
 router.get('/:id', function (req, res) {
     Post.findById(req.params.id).populate({ path: 'author', model: User }).lean().then(post => {
-        Category.find({}).lean().then(categories => {
+        Category.aggregate([
+            {
+              $lookup: {
+                from: 'posts',
+                localField: '_id',
+                foreignField: 'category',
+                as: 'posts'
+              }
+            },
+            {
+              $project: {
+                _id: 1,
+                name: 1,
+                num_of_posts: {$size: "$posts"}
+              }
+            }
+          ]).then(categories => {
             Post.find({}).sort({ $natural: -1 }).lean().then(posts => {
                 res.render("site/post", { post: post, categories: categories, posts: posts, messages: res.locals.messages })
             })
