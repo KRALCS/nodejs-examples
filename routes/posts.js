@@ -50,7 +50,7 @@ router.post('/new', urlencodedParser, function (req, res) {
 })
 
 router.get('/category/:categoryId', (req, res) => {
-    Post.find({ category: req.params.categoryId }).populate({ path: 'category', model: Category }).lean().then(posts => {
+    Post.find({ category: req.params.categoryId }).populate({ path: 'category', model: Category }).populate({path: 'author', model: User}).sort({$natural: -1}).lean().then(posts => {
         Category.aggregate([
             {
                 $lookup: {

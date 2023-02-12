@@ -2,9 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const fileUpload = require('express-fileupload')
 const MongoStore = require('connect-mongo');
-const generateDate = require('./helpers/generateDate').generateDate
-const limit = require('./helpers/limit').limit
-const setSelectedItem = require('./helpers/selected').setSelectedItem
+const helpers = require('./helpers/all')
 const {engine} = require('express-handlebars')
 const expressSession = require('express-session')
 
@@ -29,12 +27,7 @@ app.use(expressSession({
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/nodejs' }) // npm restart olunca sessionlar sıfırlanıyor. bunu çözmek için sessionları mongodbde tutmak gerekiyor
 }))
 
-// Flash Message Middleware
-app.use((req, res, next) => {
-    res.locals.messages = req.session.flash;
-    delete req.session.flash;
-    next();
-})
+
 
 app.use(fileUpload())
 app.use(express.static("public"))
@@ -52,12 +45,20 @@ app.use((req, res, next) => {
     next()
 });
 
+// Flash Message Middleware
+app.use((req, res, next) => {
+    res.locals.messages = req.session.flash;
+    delete req.session.flash;
+    next();
+})
+
 // Handlebars helpers
 app.engine('handlebars', engine({
     helpers:{
-        generateDate:generateDate, 
-        setSelectedItem: setSelectedItem,
-        limit: limit,
+        generateDate: helpers.generateDate, 
+        setSelectedItem: helpers.setSelectedItem,
+        limit: helpers.limit,
+        truncate: helpers.truncate,
     }
 }))
 app.set('view engine', 'handlebars')
