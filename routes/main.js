@@ -10,7 +10,6 @@ router.get('/', function (req, res) {
 })
 
 router.get('/blog', async function (req, res) {
-
   Post.find({}).populate({path: 'author', model: User}).sort({$natural: -1}).lean().then(posts => {
     Category.aggregate([
       {
@@ -33,6 +32,7 @@ router.get('/blog', async function (req, res) {
     })
   })
 })
+
 router.get('/contact', function (req, res) {
   res.render("site/contact")
 })

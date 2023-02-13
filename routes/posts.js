@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 const Post = require('../models/Post')
 const Category = require('../models/Category')
 const User = require('../models/User')
-const path = require('path')
+const helpers = require('../helpers/all')
 const router = express.Router();
 
 // create application/json parser
@@ -47,6 +47,35 @@ router.post('/new', urlencodedParser, function (req, res) {
         console.log(error, post)
     })
     res.redirect('/blog');
+})
+
+router.get('/search', function (req, res) {
+    if (req.query.search) {
+        const regex = new RegExp(helpers.escapeRegex(req.query.search), 'gi');
+        Post.find({ "title": regex }).populate({path: 'author', model: User}).sort({$natural: -1}).lean().then(posts => {
+            Category.aggregate([
+              {
+                $lookup: {
+                  from: 'posts',
+                  localField: '_id',
+                  foreignField: 'category',
+                  as: 'posts'
+                }
+              },
+              {
+                $project: {
+                  _id: 1,
+                  name: 1,
+                  num_of_posts: {$size: "$posts"}
+                }
+              }
+            ]).then(categories  => {
+              res.render("site/blog", {posts:posts, categories:categories, messages: res.locals.messages, query: req.query.search})
+            })
+        })
+    } else {
+        res.redirect('/blog');
+    }
 })
 
 router.get('/category/:categoryId', (req, res) => {
@@ -99,6 +128,7 @@ router.get('/:id', function (req, res) {
     });
 
 })
+
 
 /* POST /api/users gets JSON bodies
 router.post('/posts/test', jsonParser, function (req, res) {
