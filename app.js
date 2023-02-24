@@ -27,23 +27,23 @@ app.use(expressSession({
     store: MongoStore.create({ mongoUrl: 'mongodb://localhost:27017/nodejs' }) // npm restart olunca sessionlar sıfırlanıyor. bunu çözmek için sessionları mongodbde tutmak gerekiyor
 }))
 
-
-
 app.use(fileUpload())
 app.use(express.static("public"))
 app.use(methodOverride("_method"))
 
 // Display links Middleware
-app.use((req, res, next) => {
+const displayLinks = (req, res, next) => {
     const user = req.session.user;
-    console.log(req.session.user)
     if(user) {
+        console.log("Oturum Açık: " + user.email);
         res.locals.displayLinks = true
     } else {
         res.locals.displayLinks = false
     }
-    next()
-});
+    next() // Middleware içindeki işlemler bitince sayfa açılışını sağlamak için kullanılır.
+}
+
+app.use("/", displayLinks)
 
 // Flash Message Middleware
 app.use((req, res, next) => {
@@ -63,13 +63,6 @@ app.engine('handlebars', engine({
 }))
 app.set('view engine', 'handlebars')
 app.set('views', './views');
-
-const myMiddleware = (req, res, next) => {
-    console.log("Middleware")
-    next() // Middleware içindeki işlemler bitince sayfa açılışını sağlamak için kullanılır.
-}
-
-app.use("/", myMiddleware)
 
 const main = require("./routes/main")
 const posts = require("./routes/posts")
