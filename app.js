@@ -59,6 +59,7 @@ app.engine('handlebars', engine({
         setSelectedItem: helpers.setSelectedItem,
         limit: helpers.limit,
         truncate: helpers.truncate,
+        pagination: helpers.pagination,
     }
 }))
 app.set('view engine', 'handlebars')

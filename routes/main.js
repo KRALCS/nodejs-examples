@@ -10,25 +10,29 @@ router.get('/', function (req, res) {
 })
 
 router.get('/blog', async function (req, res) {
-  Post.find({}).populate({path: 'author', model: User}).sort({$natural: -1}).lean().then(posts => {
-    Category.aggregate([
-      {
-        $lookup: {
-          from: 'posts',
-          localField: '_id',
-          foreignField: 'category',
-          as: 'posts'
+  const perPage = 2;
+  const page = req.query.page || 1;
+  Post.find({}).skip((perPage * page) - perPage).limit(perPage).populate({path: 'author', model: User}).sort({$natural: -1}).lean().then(posts => {
+    Post.countDocuments().lean().then(count => {
+      Category.aggregate([
+        {
+          $lookup: {
+            from: 'posts',
+            localField: '_id',
+            foreignField: 'category',
+            as: 'posts'
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            name: 1,
+            num_of_posts: {$size: "$posts"}
+          }
         }
-      },
-      {
-        $project: {
-          _id: 1,
-          name: 1,
-          num_of_posts: {$size: "$posts"}
-        }
-      }
-    ]).then(categories  => {
-      res.render("site/blog", {posts:posts, categories:categories, messages: res.locals.messages})
+      ]).then(categories  => {
+        res.render("site/blog", {posts:posts, categories:categories, current: parseInt(page), pages: Math.ceil(count / perPage), messages: res.locals.messages})
+      })
     })
   })
 })
