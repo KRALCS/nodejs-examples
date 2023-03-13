@@ -68,10 +68,12 @@ app.set('views', './views');
 const main = require("./routes/main")
 const posts = require("./routes/posts")
 const users = require("./routes/users")
+const contact = require("./routes/contact")
 const admin = require("./routes/admin/index")
 app.use("/", main)
 app.use("/posts", posts)
 app.use("/users", users)
+app.use("/contact", contact)
 app.use("/admin", admin)
 
 app.listen(3000)

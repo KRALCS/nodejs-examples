@@ -36,7 +36,7 @@ router.get('/login', function (req, res) {
 })
 
 router.post('/login', urlencodedParser, function (req, res) {
-    const {email, password} = req.body    
+    const {email, password} = req.body
     User.find({
         email: email,
         password: password,

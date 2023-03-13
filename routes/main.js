@@ -37,10 +37,4 @@ router.get('/blog', async function (req, res) {
   })
 })
 
-router.get('/contact', function (req, res) {
-  res.render("site/contact")
-})
-
-
-
 module.exports = router;
